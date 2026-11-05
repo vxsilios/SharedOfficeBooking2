@@ -21,9 +21,9 @@ import com.example.sharedofficebooking.ui.theme.SharedOfficeBookingTheme
 import androidx.compose.foundation.Image
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import com.example.sharedofficebooking.screens.RoomsScreen
 
 // Exercise 5 - Stage 1: Employee Login and Dashboard
-// UI prototype only - no backend authentication.
 
 private val BrandBlue = Color(0xFF234F7D)
 private val PageBackground = Color(0xFFF4F6F9)
@@ -54,6 +54,10 @@ fun SpaceBookApp() {
         mutableStateOf("home")
     }
 
+    var selectedRoomName by rememberSaveable {
+        mutableStateOf("")
+    }
+
     if (!signedIn) {
 
         EmployeeLoginScreen(
@@ -67,13 +71,25 @@ fun SpaceBookApp() {
 
         when (currentPage) {
 
-            "rooms" -> ComingNextScreen(
-                title = "Find a room",
-                description = "Room availability search will be implemented in Stage 2.",
+
+            "rooms" -> RoomsScreen(
                 onBack = {
                     currentPage = "home"
+                },
+                onRoomSelected = { roomName ->
+                    selectedRoomName = roomName
+                    currentPage = "room_details"
                 }
             )
+
+            "room_details" -> ComingNextScreen(
+                title = selectedRoomName,
+                description = "Room details and booking requests will be implemented in Stage 3.",
+                onBack = {
+                    currentPage = "rooms"
+                }
+            )
+
 
             "bookings" -> ComingNextScreen(
                 title = "My bookings",
